@@ -21,24 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&a5pgs3ba#$5+whetq_qg5kixa%q!vm00$v@znyax!!wtw0@4n'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-&a5pgs3ba#$5+whetq_qg5kixa%q!vm00$v@znyax!!wtw0@4n",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
 
-
-# Allow all hosts
-codespace_name = os.getenv('CODESPACE_NAME')
-if codespace_name:
-    ALLOWED_HOSTS = [
-        'localhost',
-        '127.0.0.1',
-        f'{codespace_name}-8000.app.github.dev',
-    ]
-else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if os.environ.get('CODESPACE_NAME'):
+    ALLOWED_HOSTS.append(f"{os.environ.get('CODESPACE_NAME')}-8000.app.github.dev")
 # Application definition
 
 
@@ -57,9 +50,9 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
