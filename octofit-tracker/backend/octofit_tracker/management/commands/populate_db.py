@@ -13,14 +13,14 @@ class Command(BaseCommand):
         db = client['octofit_db']
 
         # Drop collections if they exist
-        db.users.drop()
-        db.teams.drop()
-        db.activities.drop()
-        db.leaderboard.drop()
-        db.workouts.drop()
+        db.octofit_tracker_user.drop()
+        db.octofit_tracker_team.drop()
+        db.octofit_tracker_activity.drop()
+        db.octofit_tracker_leaderboard.drop()
+        db.octofit_tracker_workout.drop()
 
         # Create unique index on email for users
-        db.users.create_index([('email', 1)], unique=True)
+        db.octofit_tracker_user.create_index([('email', 1)], unique=True)
 
         # Sample data
         users = [
@@ -50,10 +50,10 @@ class Command(BaseCommand):
             {"name": "Agility Drills", "suggested_for": ["Batman", "Black Widow"]},
         ]
 
-        db.users.insert_many(users)
-        db.teams.insert_many(teams)
-        db.activities.insert_many(activities)
-        db.leaderboard.insert_many(leaderboard)
-        db.workouts.insert_many(workouts)
+        db.octofit_tracker_user.insert_many(users)
+        db.octofit_tracker_team.insert_many(teams)
+        db.octofit_tracker_activity.insert_many(activities)
+        db.octofit_tracker_leaderboard.insert_many(leaderboard)
+        db.octofit_tracker_workout.insert_many(workouts)
 
         self.stdout.write(self.style.SUCCESS('octofit_db database populated with test data.'))
